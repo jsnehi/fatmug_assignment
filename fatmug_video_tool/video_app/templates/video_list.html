@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Videos</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #444;
+            text-align: center;
+        }
+
+        .video-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .video-item {
+            position: relative;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-item video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .video-info {
+            position: absolute;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-item:hover .video-info {
+            opacity: 1;
+        }
+
+        .video-item:hover video {
+            opacity: 0.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 20%;
+            margin: 20px 20px 20px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Uploaded Videos</h2>
+    <button><a href="{% url 'upload_video'%}"> Upload Video</a></button>
+    <div class="video-list">
+        {% for video in videos %}
+        <div class="video-item">
+            <a href="{% url 'search_video' video.id %}">
+                <!-- Video Preview -->
+                <video src="{{ video.video_file.url }}" muted></video>
+                <div class="video-info">
+                    {{ video.video_file.name }}
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.video-item').forEach(item => {
+        const video = item.querySelector('video');
+        item.addEventListener('mouseenter', () => {
+            video.currentTime = 5; 
+            video.play();
+        });
+        item.addEventListener('mouseleave', () => {
+            video.pause();
+            video.currentTime = 0; 
+        });
+    });
+</script>
+
+</body>
+</html>
